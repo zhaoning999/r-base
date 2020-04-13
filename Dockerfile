@@ -5,7 +5,7 @@ FROM rpy2/rpy2:2.9.x
 #   && apt-get install -y libudunits2-dev \
 #   && apt-get install -y libgdal-dev
 
-ARG CRAN_MIRROR=https://mirrors.tuna.tsinghua.edu.cn/CRAN/
+ARG CRAN_MIRROR=https://cloud.r-project.org
 
 RUN \
   echo "agricolae\n\
