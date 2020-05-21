@@ -1,4 +1,4 @@
-FROM rpy2/base-ubuntu:master-18.04
+FROM r-base:3.6.3
 
 
 # 运行错误，可能是rpy2基础版本原因
@@ -17,6 +17,8 @@ RUN \
         DoE.base\n\
         rsm\n\
         Rserve\n\
+        gplots\n\
+        multcomp\n\
         ggplot2\n\
         qualityTools\n\
         FrF2\n\
