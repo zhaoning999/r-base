@@ -1,10 +1,26 @@
-FROM r-base:3.6.3
+FROM ubuntu:18.04
 
+MAINTAINER Laurent Gautier <lgautier@gmail.com>
 
-# 运行错误，可能是rpy2基础版本原因
-# RUN apt-get update \
-#   && apt-get install -y libudunits2-dev \
-#   && apt-get install -y libgdal-dev
+ARG DEBIAN_FRONTEND=noninteractive
+ARG CRAN_MIRROR=https://cloud.r-project.org
+ARG CRAN_MIRROR_TAG=-cran35
+
+ARG RPY2_CFFI_MODE=BOTH
+
+COPY install_apt.sh /opt/
+COPY install_rpacks.sh /opt/
+COPY install_pip.sh /opt/
+
+RUN \
+  sh /opt/install_apt.sh && \
+  sh /opt/install_rpacks.sh && \
+  sh /opt/install_pip.sh
+  
+# Run dev version of rpy2
+RUN \
+  python3 -m pip --no-cache-dir install https://github.com/rpy2/rpy2/archive/master.zip && \
+  rm -rf /root/.cache
 
 ARG CRAN_MIRROR=https://cloud.r-project.org
 
@@ -26,6 +42,12 @@ RUN \
   R -e 'install.packages(sub("(.+)\\\\n","\\1", scan("rpacks.txt", "character")), repos="'"${CRAN_MIRROR}"'",dependencies=TRUE)' && \
   rm rpacks.txt
 
-  # 添加dependency
-# R -e "Rserve::run.Rserve(remote=TRUE)"
-  
+#   # 添加dependency
+# # R -e "Rserve::run.Rserve(remote=TRUE)"
+# # 基于 ningzhao999/r-base:latest 
+# # 新版本存在脚本无法运行问题
+# # 安装 plots
+# # install.packages('bitops')
+# # install.packages('https://cran.r-project.org/src/contrib/Archive/caTools/caTools_1.16.tar.gz',dependencies=TRUE)
+# # install.packages('gplots')
+# install.packages(,repos=CRAN,dependencies=TRUE)
